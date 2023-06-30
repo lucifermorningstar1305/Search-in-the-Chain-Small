@@ -2,8 +2,10 @@ import sys
 import argparse
 import os
 
-from ..search_in_the_chain.ColBERT.colbert.infra import Run, RunConfig, ColBERTConfig
-from ..search_in_the_chain.ColBERT.colbert import Indexer
+sys.path.append("..")
+
+from search_in_the_chain.ColBERT.colbert.infra import Run, RunConfig, ColBERTConfig
+from search_in_the_chain.ColBERT.colbert import Indexer
 
 
 if __name__ == "__main__":

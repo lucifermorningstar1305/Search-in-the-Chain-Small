@@ -2,8 +2,11 @@ from flask import Flask, render_template, request
 from functools import lru_cache
 import math
 import os
+import sys
 from dotenv import load_dotenv
 import argparse
+
+sys.path.append("..")
 
 from ..search_in_the_chain.ColBERT.colbert.infra import Run, RunConfig, ColBERTConfig
 from ..search_in_the_chain.ColBERT.colbert import Searcher
@@ -52,7 +55,7 @@ if __name__ == "__main__":
 
     # searcher = Searcher(index=f"/ColBERT-main/experiments/hotpotqa_wiki/indexes/hotpotqa_wiki.nbits=2")
     searcher = Searcher(index=args.index_name)
-    
+
     counter = {"api" : 0}
     app.run("0.0.0.0", int(os.getenv("PORT")))
 
