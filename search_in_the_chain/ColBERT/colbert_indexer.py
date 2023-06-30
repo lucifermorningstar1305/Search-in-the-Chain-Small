@@ -25,7 +25,7 @@ if __name__ == "__main__":
             root="./ColBERT/experiments/"
         )
 
-        indexer = Indexer(checkpoint="/colbert_v2.0", config=config)
+        indexer = Indexer(checkpoint="./colbert_v2.0", config=config)
         indexer.index(name=args.name, collection=args.data)
 
 
