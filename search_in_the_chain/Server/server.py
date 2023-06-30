@@ -43,7 +43,7 @@ def have_seen_or_not(query_item,query_seen_list,query_type):
 if __name__ == '__main__':
     import socket
     print('Loading data....')
-    HOST = '10.208.62.21'
+    HOST = 'localhost'
     PORT = 50007
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.bind((HOST, PORT))
