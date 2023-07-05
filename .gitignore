@@ -1,4 +1,6 @@
 **/downloads/
 **.env
-data/
+data/*
 **/colbertv2.0
+**/__pycache__/
+**/experiments/

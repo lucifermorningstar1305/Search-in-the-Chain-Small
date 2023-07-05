@@ -32,7 +32,7 @@ def process_data(folder_path:str, save_path:str):
 
                         for txt in data["text"]:
                             row_txt += " " + txt
-                        writer.writerow([count, f"Title: {data['title']} Text: {row_txt}"])
+                        writer.writerow([str(count), f"Title: {data['title']} Text: {row_txt}"])
                         count += 1
 
 
