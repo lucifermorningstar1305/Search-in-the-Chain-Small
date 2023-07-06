@@ -64,15 +64,14 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    app.run("0.0.0.0", 50003)
-    
     experiment = f"{args.dataset}_wiki"
     index_name = f"{args.dataset}.2bits"
 
     checkpoint = "colbert-ir/colbertv2.0"
-
+    searcher = None
     with Run().context(RunConfig(experiment=experiment)):
         searcher = Searcher(index=index_name, collection=args.path)
 
+    app.run("0.0.0.0", 50003)
     
     
