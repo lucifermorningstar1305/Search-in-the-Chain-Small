@@ -27,7 +27,6 @@ def api_search_query(query:str, k:int) -> Dict[str, List]:
     pids, ranks, scores = pids[:k], ranks[:k], scores[:k]
 
     print(pids)
-    passages = [searcher.collection[pid] for pid in pids]
     probs = [math.exp(score) for score in scores]
     probs = [prob/sum(probs) for prob in probs]
 
