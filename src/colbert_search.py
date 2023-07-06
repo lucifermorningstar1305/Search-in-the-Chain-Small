@@ -72,6 +72,8 @@ if __name__ == "__main__":
     with Run().context(RunConfig(experiment=experiment)):
         searcher = Searcher(index=index_name, collection=args.path)
 
+    print(searcher.collection[:10])
+
     app.run("0.0.0.0", 50003)
     
     
