@@ -30,7 +30,8 @@ def execute(data_path: str, start_idx: int, model: AutoModelForCausalLM, tokeniz
     :returns: an integer value to stop the execution
     """
 
-    data = open(data_path, "r")
+    fp = open(data_path, "r")
+    data = json.load(fp)
 
     generation_config = model.generation_config
     generation_config.max_new_tokens = 64
