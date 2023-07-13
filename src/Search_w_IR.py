@@ -44,8 +44,6 @@ def execute(data_path: str, start_idx: int, model: AutoModelForCausalLM, tokeniz
         if k < start_idx:
             continue
         
-
-        example = json.loads(example)
         ques = example["question"]
         answer = example["answer"]
 
@@ -145,6 +143,10 @@ def execute(data_path: str, start_idx: int, model: AutoModelForCausalLM, tokeniz
 if __name__ == "__main__":
 
     load_dotenv()
+
+    if not os.path.exists("../logs"):
+        os.mkdir("../logs/")
+
     logging.basicConfig(filename="../logs/Search_w_IR.log",
                         level=logging.DEBUG,
                         format="%(asctime)s:%(levelname)s:%(name)s:%(message)s")
