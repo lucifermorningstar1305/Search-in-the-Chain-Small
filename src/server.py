@@ -7,7 +7,7 @@ import regex
 import string
 from sentence_transformers import CrossEncoder
 import requests
-model_cross_encoder = CrossEncoder('/Quora_cross_encoder',device=device)
+model_cross_encoder = CrossEncoder('cross-encoder/quora-roberta-large',device=device)
 model_cross_encoder.model.eval()
 
 def normalize_answer(s):
