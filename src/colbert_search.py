@@ -25,7 +25,7 @@ def api_search_query(query:str, k:int) -> Dict[str, List]:
 
     pids, ranks, scores = searcher.search(query, k=100)
     pids, ranks, scores = pids[:k], ranks[:k], scores[:k]
-    
+
     probs = [math.exp(score) for score in scores]
     probs = [prob/sum(probs) for prob in probs]
 
@@ -56,7 +56,8 @@ def api_search():
 
 
 if __name__ == "__main__":
-    
+    load_dotenv()
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--path", "-p", required=True, type=str, help="the dataset path")
     parser.add_argument("--dataset", "-d", required=True, type=str, help="the name of the dataset")
@@ -73,6 +74,6 @@ if __name__ == "__main__":
 
     print(searcher.collection[:10])
 
-    app.run("0.0.0.0", 50003)
+    app.run(os.environ["COLBERT_SERVER"], os.environ["COLBERT_PORT"])
     
     
