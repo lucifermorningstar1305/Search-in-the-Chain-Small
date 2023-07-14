@@ -8,6 +8,7 @@ import string
 from sentence_transformers import CrossEncoder
 import requests
 import socket
+import logging
 
 def normalize_answer(s):
     def remove_articles(text):
@@ -41,17 +42,24 @@ def have_seen_or_not(query_item,query_seen_list,query_type):
 
 if __name__ == '__main__':
 
+    if not os.path.exists("../logs"):
+        os.mkdir("../logs")
+
+    logging.basicConfig(filename="../logs/server.log",
+                        level=logging.DEBUG,
+                        format="%(asctime)s:%(levelname)s:%(name)s:%(message)s")
+    
     
     model_cross_encoder = CrossEncoder('cross-encoder/quora-roberta-large',device=device)
     model_cross_encoder.model.eval()
 
-    print('Loading data....')
+    logging.info('Loading data....')
     HOST = 'localhost'
     PORT = 50007
     sock = socket.socket()
     sock.bind((HOST, PORT))
     sock.listen(5)
-    print('Waiting for connection...')
+    logging.info('Waiting for connection...')
     sum_cite = 0
     good_cite = 0
     dic_question_answer_to_reference = []
@@ -60,7 +68,7 @@ if __name__ == '__main__':
     with torch.no_grad():
         while True:
             connection,address = sock.accept()
-            print('connect success from {}'.format(address))
+            logging.info('connect success from {}'.format(address))
             continue_label = True
             query_seen_list = []
             start = True
@@ -71,7 +79,7 @@ if __name__ == '__main__':
                 #connection.settimeout(5)
                 buf = connection.recv(10240)
                 query = buf.decode()
-                print('recv query is {}'.format(query))
+                logging.info('recv query is {}'.format(query))
                 if query == 'end':
                     break_flag = True
                     break
@@ -87,7 +95,7 @@ if __name__ == '__main__':
                         query_item = temp[1]
                         if ':' in query_item:
                             query_item = query_item[1:]
-                        print('solving: '+query_item)
+                        logging.info('solving: '+query_item)
                         if not have_seen_or_not(query_item,query_seen_list,query_type):
                             now_reference = {}
                             query_seen_list.append(query_item)
@@ -97,7 +105,7 @@ if __name__ == '__main__':
                             response = requests.get(url=url)
                             res_dic = response.json()
                             corpus_list_topk = res_dic['topk']
-                            #print(corpus_list_topk)
+                            #logging.info(corpus_list_topk)
                             top1_passage = corpus_list_topk[0]['text']
                             #top1_passage = retrieval_model_hotpotqa.rerank_topk_colbert(corpus_list_topk, query_item)
                             answer,relevance_score = reader_model.get_answer(query=query_item,texts='',title=top1_passage)
@@ -108,16 +116,16 @@ if __name__ == '__main__':
                             now_reference['idx'] = ques_idx
                             dic_question_answer_to_reference.append(now_reference)
 
-                            print('answer is '+answer)
-                            print('reference is'+top1_passage)
-                            print('score is {}'.format(relevance_score))
+                            logging.info('answer is '+answer)
+                            logging.info('reference is'+top1_passage)
+                            logging.info('score is {}'.format(relevance_score))
                             sum_cite += 1
-                            print('query_type is '+query_type)
+                            logging.info('query_type is '+query_type)
                             if 'Unsolved' in query_type:
                                 message = '[Unsolved Query]:{}<SEP>[Answer]:{}<SEP>[Reference]:{}<SEP>'.format(query_item,
                                                                                                                answer,
                                                                                                                top1_passage)
-                                print(message)
+                                logging.info(message)
                                 continue_label = True
                                 if relevance_score > 1.5:
                                     good_cite += 1
@@ -131,7 +139,7 @@ if __name__ == '__main__':
                                         predict_answer = query_list[answer_start_idx]
                                         break
                                     answer_start_idx += 1
-                                print('predict answer is '+predict_answer)
+                                logging.info('predict answer is '+predict_answer)
                                 match_label = match_or_not(prediction=predict_answer,ground_truth=answer)
                                 if match_label:
                                     continue
@@ -139,7 +147,7 @@ if __name__ == '__main__':
                                     message = '[Query]:{}<SEP>[Answer]:{}<SEP>[Reference]:{}<SEP>'.format(query_item,
                                                                                              answer,
                                                                                              top1_passage)
-                                    print(message)
+                                    logging.info(message)
                                     continue_label = True
                                     break
                 if continue_label:
