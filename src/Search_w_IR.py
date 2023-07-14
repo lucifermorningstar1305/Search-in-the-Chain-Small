@@ -101,9 +101,11 @@ def execute(data_path: str, start_idx: int, model: AutoModelForCausalLM, tokeniz
                 resp = tokenizer.decode(outputs[0], skip_special_tokens=True)[len(prompt)-2:]
                 predict_answer += resp
 
+                logging.info(f"Response from Falcon: {resp}")
                 logging.info("Sending generated answer to Colbert")
                 sock.send(resp[len(prompt)-2:].encode())
 
+                logging.info("Receiving feeback from Colbert...")
                 feedback = sock.recv(10240).decode()
                 logging.info(f"Recieved feedback from Colbert: {feedback}")
 
