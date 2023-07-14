@@ -7,8 +7,7 @@ import regex
 import string
 from sentence_transformers import CrossEncoder
 import requests
-model_cross_encoder = CrossEncoder('cross-encoder/quora-roberta-large',device=device)
-model_cross_encoder.model.eval()
+import socket
 
 def normalize_answer(s):
     def remove_articles(text):
@@ -41,11 +40,15 @@ def have_seen_or_not(query_item,query_seen_list,query_type):
     return False
 
 if __name__ == '__main__':
-    import socket
+
+    
+    model_cross_encoder = CrossEncoder('cross-encoder/quora-roberta-large',device=device)
+    model_cross_encoder.model.eval()
+
     print('Loading data....')
     HOST = 'localhost'
     PORT = 50007
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock = socket.socket()
     sock.bind((HOST, PORT))
     sock.listen(5)
     print('Waiting for connection...')

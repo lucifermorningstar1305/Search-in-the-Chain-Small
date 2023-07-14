@@ -85,7 +85,7 @@ def execute(data_path: str, start_idx: int, model: AutoModelForCausalLM, tokeniz
         feedback_answer = "continue"
         predict_answer = ""
         
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock = socket.socket()
         sock.connect(('localhost', 50007))
 
         device = "cuda:1"
